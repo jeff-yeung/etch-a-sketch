@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="origin" name="referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-a-Sketch</title>
+</head>
+<body>
+    <header></header>
+    <div class="container"></div>
+</body>
+<script>
+    let viewportWidth = 0;
+    let numOfDivs = 64;
+    let squareEachSide = Math.sqrt(numOfDivs);
+
+    const container = document.querySelector('div.container');
+    if (window.innerWidth >= window.innerHeight){
+        viewportWidth = window.innerHeight;
+    } else {
+        viewportWidth = window.innerWidth;
+    }
+    container.style.width = viewportWidth + 'px';
+    container.style.height = viewportWidth + 'px';
+
+    generateGrids(squareEachSide, numOfDivs);
+
+    const header = document.querySelector('header');
+    const header1 = document.createElement('H1');
+    header1.textContent = 'Etch-A-Sketch';
+    header1.style.cssText = "color:#2e2e2e; size: 30px; text-decoration: underline";
+    // Insert before first childNode or at the beginning if there are no nodes
+    header.appendChild(header1);
+
+    const reset = document.createElement('button');
+    reset.setAttribute('style', 'display:inline-block; margin: 5px; padding: 5px; color:white');
+    reset.textContent = 'Reset Rows';
+    reset.style.backgroundColor = '#d16054';
+    reset.style.border = '1px solid #d4d3c7';
+    reset.style.borderRadius ='2px';
+    header.appendChild(reset);
+    
+    reset.addEventListener('click', (e) => {
+        squareEachSide = prompt('How many squares per side?');
+        numOfDivs = Math.pow(squareEachSide, 2);
+        generateGrids(squareEachSide, numOfDivs);
+    });
+
+    // functions 
+    function generateGrids(rows, totalSquares) {
+        clearContents(container);
+        container.style.display = "inline-grid";
+        container.style.gridTemplateColumns = " repeat(" + rows + ", auto [col-start])";
+        container.style.gridTemplateRows = " repeat(" + rows + ", auto [row-start])";
+        container.style.justifyContent = "stretch";
+
+        for (let i = 0; i < totalSquares; i ++){
+            let squares = document.createElement('div');
+            squares.setAttribute('class', 'square');
+            squares.setAttribute('style', 'color: black; background-color:white; border: 1px solid black');
+            container.appendChild(squares);
+        }
+        const hoverEffect = document.querySelectorAll('div.square');
+        
+        hoverEffect.forEach((div) => {
+            div.addEventListener('mouseover', (e) => {
+                div.style.backgroundColor = 'black';
+            })
+            div.addEventListener('mouseleave', (e) => {
+                div.style.backgroundColor = 'white';
+            })
+        });
+    }
+
+    function clearContents(object) {
+        object.innerHTML = "";
+    }
+
+</script>
+</html>
